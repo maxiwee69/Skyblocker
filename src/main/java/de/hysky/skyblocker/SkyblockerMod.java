@@ -50,6 +50,8 @@ import de.hysky.skyblocker.skyblock.tabhud.TabHud;
 import de.hysky.skyblocker.skyblock.tabhud.screenbuilder.ScreenMaster;
 import de.hysky.skyblocker.skyblock.tabhud.util.PlayerListMgr;
 import de.hysky.skyblocker.skyblock.waypoint.*;
+import de.hysky.skyblocker.stp.SkyblockerArmorTextures;
+import de.hysky.skyblocker.stp.SkyblockerPredicateTypes;
 import de.hysky.skyblocker.utils.*;
 import de.hysky.skyblocker.utils.chat.ChatMessageListener;
 import de.hysky.skyblocker.utils.discord.DiscordRPCManager;
@@ -202,6 +204,8 @@ public class SkyblockerMod implements ClientModInitializer {
         TooltipManager.init();
         SlotTextManager.init();
         BazaarHelper.init();
+        SkyblockerPredicateTypes.init();
+        SkyblockerArmorTextures.init();
 
         Scheduler.INSTANCE.scheduleCyclic(Utils::update, 20);
         Scheduler.INSTANCE.scheduleCyclic(DiscordRPCManager::updateDataAndPresence, 200);
