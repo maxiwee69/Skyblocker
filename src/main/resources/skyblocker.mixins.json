@@ -59,6 +59,7 @@
     "stp.ArmorFeatureRendererMixin",
     "stp.BakedModelManagerMixin",
     "stp.BlockModelsMixin",
+    "stp.LivingEntityRendererMixin",
     "stp.ModelOverrideDeserializerMixin",
     "stp.ModelOverrideListMixin",
     "stp.ModelOverrideMixin"
