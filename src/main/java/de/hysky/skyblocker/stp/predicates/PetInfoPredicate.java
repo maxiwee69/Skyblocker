@@ -21,15 +21,16 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.util.Identifier;
 
 /**
- * Matches the {@code petInfo} field on pets.
+ * Matches the {@code petInfo} field on pets. Requires a match on all specified fields.
  * 
  * @since 1.22.0
  */
-public record PetInfoPredicate(Optional<String> type, Optional<String> tier) implements SkyblockerTexturePredicate {
+public record PetInfoPredicate(Optional<String> type, Optional<String> tier, Optional<String> skin) implements SkyblockerTexturePredicate {
 	public static final Identifier ID = Identifier.of(SkyblockerMod.NAMESPACE, "pet_info");
 	public static final MapCodec<PetInfoPredicate> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			Codec.STRING.optionalFieldOf("type").forGetter(PetInfoPredicate::type),
-			Codec.STRING.optionalFieldOf("tier").forGetter(PetInfoPredicate::tier))
+			Codec.STRING.optionalFieldOf("tier").forGetter(PetInfoPredicate::tier),
+			Codec.STRING.optionalFieldOf("skin").forGetter(PetInfoPredicate::skin))
 			.apply(instance, PetInfoPredicate::new));
 	public static final Codec<PetInfoPredicate> CODEC = MAP_CODEC.codec();
 
@@ -46,10 +47,23 @@ public record PetInfoPredicate(Optional<String> type, Optional<String> tier) imp
 
 					boolean typeMatches = type.isPresent() ? info.type().equals(this.type.get()) : false;
 					boolean tierMatches = tier.isPresent() ? info.tier().equals(this.tier.get()) : false;
+					boolean skinMatches = skin.isPresent() ? info.skin().orElse("").equals(this.skin.get()) : false;
 
 					//Perform logical matching on the predicate
-					//if type and tier are present, match both - if type or is tier present, match either - otherwise false
-					return type.isPresent() && tier.isPresent() ? typeMatches && tierMatches : (type.isPresent() || tier.isPresent() ? typeMatches || tierMatches : false);
+					//Require a match on all specified fields
+					if (type.isPresent() && tier.isPresent() && skin.isPresent()) {
+						return typeMatches && tierMatches && skinMatches;
+					} else if (type.isPresent() && tier.isPresent()) {
+						return typeMatches && tierMatches;
+					} else if (type.isPresent() && skin.isPresent()) {
+						return typeMatches && skinMatches;
+					} else if (tier.isPresent() && skin.isPresent()) {
+						return tierMatches && skinMatches;
+					} else if (type.isPresent() || tier.isPresent() || skin.isPresent()) {
+						return typeMatches || tierMatches || skinMatches;
+					}
+
+					return false;
 				} catch (Exception ignored) {}
 			}
 		}

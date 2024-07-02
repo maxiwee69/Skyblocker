@@ -20,7 +20,7 @@ Predicates are evaluated in the order in which they are defined, so if one predi
 | skyblocker:location         | String | Matches for a Skyblock location.                                     | 1.22.0 |
 | skyblocker:regex            | Object | Allows for a full or partial regex match on an item's lore or name.  | 1.22.0 |
 | skyblocker:string           | Object | Allows for a full or partial string match on an item's lore or name. | 1.22.0 |
-| skyblocker:pet_info         | Object | Allows for matching a to a pet type or tier.                         | 1.22.0 |
+| skyblocker:pet_info         | Object | Allows for matching a to a pet type, tier, or skin.                  | 1.22.0 |
 | skyblocker:coordinate_range | Object | Allows for matching whether the player is inside of a box.           | 1.22.0 |
 
 *Note:* The only predicates here that do not require an `ItemStack` are the `location`, and `coordinate_range` predicates. All other predicates listed here require an `ItemStack` which means that they can only be tested in scenarios where an `ItemStack` is available. Any predicate that doesn't match this criteria can be used in any place, meanwhile the predicates that do require an `ItemStack` can only be used in item and armor re-texturing.
@@ -61,9 +61,10 @@ Predicates are evaluated in the order in which they are defined, so if one predi
 ```
 ```json
 "predicate": {
-	"skyblocker:pet_info": { //When both the pet type & tier are defined, requires a match for both. If only the type or tier is defined it only requires a match for said field.
+	"skyblocker:pet_info": { //Requires that the equivalent pet info field's value match the value you specify here. All fields specified will require a match, if you don't care about the tier field for example then do not include it.
 		"type": "GOLDEN_DRAGON", //Optional Field
-		"tier": "LEGENDARY" //Optional Field
+		"tier": "LEGENDARY", //Optional Field
+		"skin": "RABBIT_AQUAMARINE" //Optional Field - the pet skin id without the PET_SKIN_ prefix
 	}
 }
 ```
