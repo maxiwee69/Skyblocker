@@ -13,17 +13,17 @@ Predicates are evaluated in the order in which they are defined, so if one predi
 ### Data Predicates
 "Data" predicates are predicates which match upon some kind of item data, like the Skyblock item id, an item's custom data, or string/regex matching.<br>
 
-| Predicate Id                | Type   | Description                                                          | Since  |
-|-----------------------------|--------|----------------------------------------------------------------------|--------|
-| skyblocker:item_id          | String | Exact match for a Skyblock Item ID.                                  | 1.22.0 |
-| skyblocker:custom_data      | SNBT   | Looks for a match on an item's custom data.                          | 1.22.0 |
-| skyblocker:location         | String | Matches for a Skyblock location.                                     | 1.22.0 |
-| skyblocker:regex            | Object | Allows for a full or partial regex match on an item's lore or name.  | 1.22.0 |
-| skyblocker:string           | Object | Allows for a full or partial string match on an item's lore or name. | 1.22.0 |
-| skyblocker:pet_info         | Object | Allows for matching a to a pet type, tier, or skin.                  | 1.22.0 |
-| skyblocker:coordinate_range | Object | Allows for matching whether the player is inside of a box.           | 1.22.0 |
+| Predicate Id            | Type   | Description                                                          | Since  |
+|-------------------------|--------|----------------------------------------------------------------------|--------|
+| skyblocker:item_id      | String | Exact match for a Skyblock Item ID.                                  | 1.22.0 |
+| skyblocker:custom_data  | SNBT   | Looks for a match on an item's custom data.                          | 1.22.0 |
+| skyblocker:location     | String | Matches for a Skyblock location.                                     | 1.22.0 |
+| skyblocker:regex        | Object | Allows for a full or partial regex match on an item's lore or name.  | 1.22.0 |
+| skyblocker:string       | Object | Allows for a full or partial string match on an item's lore or name. | 1.22.0 |
+| skyblocker:pet_info     | Object | Allows for matching a to a pet type, tier, or skin.                  | 1.22.0 |
+| skyblocker:bounding_box | Object | Allows for matching whether the player is inside of a box.           | 1.22.0 |
 
-*Note:* The only predicates here that do not require an `ItemStack` are the `location`, and `coordinate_range` predicates. All other predicates listed here require an `ItemStack` which means that they can only be tested in scenarios where an `ItemStack` is available. Any predicate that doesn't match this criteria can be used in any place, meanwhile the predicates that do require an `ItemStack` can only be used in item and armor re-texturing.
+*Note:* The only predicates here that do not require an `ItemStack` are the `location`, and `bounding_box` predicates. All other predicates listed here require an `ItemStack` which means that they can only be tested in scenarios where an `ItemStack` is available. Any predicate that doesn't match this criteria can be used in any place, meanwhile the predicates that do require an `ItemStack` can only be used in item and armor re-texturing.
 
 #### Examples
 ```json
@@ -70,7 +70,7 @@ Predicates are evaluated in the order in which they are defined, so if one predi
 ```
 ```json
 "predicate": {
-	"skyblocker:coordinate_range": { //This predicate automatically determines the min/max coordinates from the two positions while checking whether the player is inside of the defined box.
+	"skyblocker:bounding_box": { //This predicate automatically determines the min/max coordinates from the two positions while checking whether the player is inside of the defined box.
 		"pos1": [
 			127, //X
 			175, //Y
@@ -347,7 +347,7 @@ Here is an example of a block override file that will override light blue wool w
 		"predicate": {
 			"skyblocker:not": [ //Exclude this rule from being active inside of the Glacite Tunnels
 				{
-					"id": "skyblocker:coordinate_range",
+					"id": "skyblocker:bounding_box",
 					"pos1": [
 						127,
 						175,
@@ -369,7 +369,7 @@ Here is an example of a block override file that will override light blue wool w
 			"minecraft:packed_ice": "block/glacite"
 		},
 		"predicate": {
-			"skyblocker:coordinate_range": { //Enable when in the Glacite Tunnels
+			"skyblocker:bounding_box": { //Enable when in the Glacite Tunnels
 				"pos1": [
 					127,
 					175,
@@ -388,7 +388,7 @@ Here is an example of a block override file that will override light blue wool w
 *Note:* Since this file is named `mining_3.json` the Dwarven Mines location predicate is automatically inferred for all overrides.
 
 ### Special Functionality
-When available, the position tested on the `coordinate_range` predicate may be the location of a block that matched the `replacements` provided. In any case regardless of whether its a block position or the player's current position being tested the results should remain the same provided that the coordinate ranges specified are sensible.
+When available, the position tested on the `bounding_box` predicate may be the location of a block that matched the `replacements` provided. In any case regardless of whether its a block position or the player's current position being tested the results should remain the same provided that the defined boxes are sensible.
 
 ## Conclusion
 Enjoy re-texturing to your heart's content! We plan on adding far more powerful re-texturing features very very soon. If you have any requests let us know and we will add it to our TODO list and get it done!

@@ -19,13 +19,13 @@ import net.minecraft.util.math.BlockPos;
  * 
  * @since 1.22.0
  */
-public record CoordinateRangePredicate(BlockPos pos1, BlockPos pos2) implements SkyblockerTexturePredicate {
-	public static final Identifier ID = Identifier.of(SkyblockerMod.NAMESPACE, "coordinate_range"); //TODO rename to bounding_box
-	public static final MapCodec<CoordinateRangePredicate> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-			BlockPos.CODEC.fieldOf("pos1").forGetter(CoordinateRangePredicate::pos1),
-			BlockPos.CODEC.fieldOf("pos2").forGetter(CoordinateRangePredicate::pos2))
-			.apply(instance, CoordinateRangePredicate::new));
-	public static final Codec<CoordinateRangePredicate> CODEC = MAP_CODEC.codec();
+public record BoundingBoxPredicate(BlockPos pos1, BlockPos pos2) implements SkyblockerTexturePredicate {
+	public static final Identifier ID = Identifier.of(SkyblockerMod.NAMESPACE, "bounding_box");
+	public static final MapCodec<BoundingBoxPredicate> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+			BlockPos.CODEC.fieldOf("pos1").forGetter(BoundingBoxPredicate::pos1),
+			BlockPos.CODEC.fieldOf("pos2").forGetter(BoundingBoxPredicate::pos2))
+			.apply(instance, BoundingBoxPredicate::new));
+	public static final Codec<BoundingBoxPredicate> CODEC = MAP_CODEC.codec();
 
 	@Override
 	public boolean test(ItemStack stack) {
@@ -45,7 +45,7 @@ public record CoordinateRangePredicate(BlockPos pos1, BlockPos pos2) implements 
 
 	@Override
 	public SkyblockerPredicateType<?> getType() {
-		return SkyblockerPredicateTypes.COORDINATE_RANGE;
+		return SkyblockerPredicateTypes.BOUNDING_BOX;
 	}
 
 	@Override

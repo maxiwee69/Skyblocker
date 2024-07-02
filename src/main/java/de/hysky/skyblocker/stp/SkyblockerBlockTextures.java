@@ -26,7 +26,7 @@ import com.mojang.serialization.JavaOps;
 import com.mojang.serialization.JsonOps;
 
 import de.hysky.skyblocker.SkyblockerMod;
-import de.hysky.skyblocker.stp.predicates.CoordinateRangePredicate;
+import de.hysky.skyblocker.stp.predicates.BoundingBoxPredicate;
 import de.hysky.skyblocker.stp.predicates.LocationPredicate;
 import de.hysky.skyblocker.stp.predicates.SkyblockerTexturePredicate;
 import de.hysky.skyblocker.utils.datafixer.ItemStackComponentizationFixer;
@@ -143,7 +143,7 @@ public class SkyblockerBlockTextures {
 		overrideLoop: for (CustomBlockOverride override : CUSTOM_BLOCK_OVERRIDES) {
 			if (override.predicates() != null) {
 				for (SkyblockerTexturePredicate predicate : override.predicates()) {
-					boolean result = (predicate instanceof CoordinateRangePredicate coordRange && pos != null) ? coordRange.test(pos) : predicate.test(null);
+					boolean result = (predicate instanceof BoundingBoxPredicate coordRange && pos != null) ? coordRange.test(pos) : predicate.test(null);
 
 					if (!result) continue overrideLoop;
 				}
