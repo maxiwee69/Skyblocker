@@ -14,8 +14,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
+/**
+ * Checks whether a position is within the bounding box specified by {@code pos1} and {@code pos2}.
+ * 
+ * @since 1.22.0
+ */
 public record CoordinateRangePredicate(BlockPos pos1, BlockPos pos2) implements SkyblockerTexturePredicate {
-	public static final Identifier ID = Identifier.of(SkyblockerMod.NAMESPACE, "coordinate_range");
+	public static final Identifier ID = Identifier.of(SkyblockerMod.NAMESPACE, "coordinate_range"); //TODO rename to bounding_box
 	public static final MapCodec<CoordinateRangePredicate> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			BlockPos.CODEC.fieldOf("pos1").forGetter(CoordinateRangePredicate::pos1),
 			BlockPos.CODEC.fieldOf("pos2").forGetter(CoordinateRangePredicate::pos2))
@@ -26,13 +31,16 @@ public record CoordinateRangePredicate(BlockPos pos1, BlockPos pos2) implements 
 	public boolean test(ItemStack stack) {
 		ClientPlayerEntity player = MinecraftClient.getInstance().player;
 
-		if (player != null) {
-			BlockPos pos = player.getBlockPos();
-
-			return RenderHelper.pointIsInArea(pos.getX(), pos.getY(), pos.getZ(), pos1.getX(), pos1.getY(), pos1.getZ(), pos2.getX(), pos2.getY(), pos2.getZ());
-		}
+		if (player != null) return test(player.getBlockPos());
 
 		return false;
+	}
+
+	/**
+	 * Allows for testing on other positions.
+	 */
+	public boolean test(BlockPos pos) {
+		return RenderHelper.pointIsInArea(pos.getX(), pos.getY(), pos.getZ(), pos1.getX(), pos1.getY(), pos1.getZ(), pos2.getX(), pos2.getY(), pos2.getZ());
 	}
 
 	@Override

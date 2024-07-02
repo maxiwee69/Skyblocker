@@ -386,5 +386,8 @@ Here is an example of a block override file that will override light blue wool w
 ```
 *Note:* Since this file is named `mining_3.json` the Dwarven Mines location predicate is automatically inferred for all overrides.
 
+### Special Functionality
+When available, the position tested on the `coordinate_range` predicate may be the location of a block that matched the `replacements` provided. In any case regardless of whether its a block position or the player's current position being tested the results should remain the same provided that the coordinate ranges specified are sensible.
+
 ## Conclusion
 Enjoy re-texturing to your heart's content! We plan on adding far more powerful re-texturing features very very soon. If you have any requests let us know and we will add it to our TODO list and get it done!

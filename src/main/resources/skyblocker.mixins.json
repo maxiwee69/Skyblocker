@@ -62,7 +62,8 @@
     "stp.LivingEntityRendererMixin",
     "stp.ModelOverrideDeserializerMixin",
     "stp.ModelOverrideListMixin",
-    "stp.ModelOverrideMixin"
+    "stp.ModelOverrideMixin",
+    "stp.SodiumChunkBuilderMeshingTaskMixin"
   ],
   "injectors": {
     "defaultRequire": 1

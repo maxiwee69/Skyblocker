@@ -13,6 +13,7 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import com.google.gson.JsonArray;
@@ -25,6 +26,7 @@ import com.mojang.serialization.JavaOps;
 import com.mojang.serialization.JsonOps;
 
 import de.hysky.skyblocker.SkyblockerMod;
+import de.hysky.skyblocker.stp.predicates.CoordinateRangePredicate;
 import de.hysky.skyblocker.stp.predicates.LocationPredicate;
 import de.hysky.skyblocker.stp.predicates.SkyblockerTexturePredicate;
 import de.hysky.skyblocker.utils.datafixer.ItemStackComponentizationFixer;
@@ -43,6 +45,7 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
+import net.minecraft.util.math.BlockPos;
 
 public class SkyblockerBlockTextures {
 	private static final Logger LOGGER = LogUtils.getLogger();
@@ -136,11 +139,13 @@ public class SkyblockerBlockTextures {
 		}, Executors.newVirtualThreadPerTaskExecutor());
 	}
 
-	public static Identifier getBlockReplacement(Block block) {
+	public static Identifier getBlockReplacement(Block block, @Nullable BlockPos pos) {
 		overrideLoop: for (CustomBlockOverride override : CUSTOM_BLOCK_OVERRIDES) {
 			if (override.predicates() != null) {
 				for (SkyblockerTexturePredicate predicate : override.predicates()) {
-					if (!predicate.test(null)) continue overrideLoop;
+					boolean result = (predicate instanceof CoordinateRangePredicate coordRange && pos != null) ? coordRange.test(pos) : predicate.test(null);
+
+					if (!result) continue overrideLoop;
 				}
 
 				CustomBlockOverride newOverride = override;
