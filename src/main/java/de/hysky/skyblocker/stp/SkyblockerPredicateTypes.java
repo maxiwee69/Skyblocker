@@ -8,6 +8,7 @@ import de.hysky.skyblocker.stp.predicates.LocationPredicate;
 import de.hysky.skyblocker.stp.predicates.NotPredicate;
 import de.hysky.skyblocker.stp.predicates.OrPredicate;
 import de.hysky.skyblocker.stp.predicates.PetInfoPredicate;
+import de.hysky.skyblocker.stp.predicates.ProfileComponentPredicate;
 import de.hysky.skyblocker.stp.predicates.RegexPredicate;
 import de.hysky.skyblocker.stp.predicates.SkyblockerTexturePredicate;
 import de.hysky.skyblocker.stp.predicates.StringPredicate;
@@ -23,6 +24,7 @@ public interface SkyblockerPredicateTypes {
 	SkyblockerPredicateType<NotPredicate> NOT = register(NotPredicate.ID, new SkyblockerPredicateType<>(NotPredicate.CODEC, NotPredicate.MAP_CODEC));
 	SkyblockerPredicateType<OrPredicate> OR = register(OrPredicate.ID, new SkyblockerPredicateType<>(OrPredicate.CODEC, OrPredicate.MAP_CODEC));
 	SkyblockerPredicateType<PetInfoPredicate> PET_INFO = register(PetInfoPredicate.ID, new SkyblockerPredicateType<>(PetInfoPredicate.CODEC, PetInfoPredicate.MAP_CODEC));
+	SkyblockerPredicateType<ProfileComponentPredicate> PROFILE_COMPONENT = register(ProfileComponentPredicate.ID, new SkyblockerPredicateType<>(ProfileComponentPredicate.CODEC, ProfileComponentPredicate.MAP_CODEC));
 	SkyblockerPredicateType<RegexPredicate> REGEX = register(RegexPredicate.ID, new SkyblockerPredicateType<>(RegexPredicate.CODEC, RegexPredicate.MAP_CODEC));
 	SkyblockerPredicateType<StringPredicate> STRING = register(StringPredicate.ID, new SkyblockerPredicateType<>(StringPredicate.CODEC, StringPredicate.MAP_CODEC));
 

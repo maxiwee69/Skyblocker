@@ -13,15 +13,16 @@ Predicates are evaluated in the order in which they are defined, so if one predi
 ### Data Predicates
 "Data" predicates are predicates which match upon some kind of item data, like the Skyblock item id, an item's custom data, or string/regex matching.<br>
 
-| Predicate Id            | Type   | Description                                                          | Since  |
-|-------------------------|--------|----------------------------------------------------------------------|--------|
-| skyblocker:item_id      | String | Exact match for a Skyblock Item ID.                                  | 1.22.0 |
-| skyblocker:custom_data  | SNBT   | Looks for a match on an item's custom data.                          | 1.22.0 |
-| skyblocker:location     | String | Matches for a Skyblock location.                                     | 1.22.0 |
-| skyblocker:regex        | Object | Allows for a full or partial regex match on an item's lore or name.  | 1.22.0 |
-| skyblocker:string       | Object | Allows for a full or partial string match on an item's lore or name. | 1.22.0 |
-| skyblocker:pet_info     | Object | Allows for matching a to a pet type, tier, or skin.                  | 1.22.0 |
-| skyblocker:bounding_box | Object | Allows for matching whether the player is inside of a box.           | 1.22.0 |
+| Predicate Id                 | Type   | Description                                                          | Since  |
+|------------------------------|--------|----------------------------------------------------------------------|--------|
+| skyblocker:item_id           | String | Exact match for a Skyblock Item ID.                                  | 1.22.0 |
+| skyblocker:custom_data       | SNBT   | Looks for a match on an item's custom data.                          | 1.22.0 |
+| skyblocker:location          | String | Matches for a Skyblock location.                                     | 1.22.0 |
+| skyblocker:regex             | Object | Allows for a full or partial regex match on an item's lore or name.  | 1.22.0 |
+| skyblocker:string            | Object | Allows for a full or partial string match on an item's lore or name. | 1.22.0 |
+| skyblocker:pet_info          | Object | Allows for matching a to a pet type, tier, or skin.                  | 1.22.0 |
+| skyblocker:bounding_box      | Object | Allows for matching whether the player is inside of a box.           | 1.22.0 |
+| skyblocker:profile_component | Object | Allows for matching to a profile component's uuid.                   | 1.22.0 |
 
 *Note:* The only predicates here that do not require an `ItemStack` are the `location`, and `bounding_box` predicates. All other predicates listed here require an `ItemStack` which means that they can only be tested in scenarios where an `ItemStack` is available. Any predicate that doesn't match this criteria can be used in any place, meanwhile the predicates that do require an `ItemStack` can only be used in item and armor re-texturing.
 
@@ -81,6 +82,13 @@ Predicates are evaluated in the order in which they are defined, so if one predi
 			111,  //Y
 			480   //Z
 		]
+	}
+}
+```
+```json
+"predicate": {
+	"skyblocker:profile_component": {
+		"uuid": "cf05e314-fa88-4b01-b963-77961375a86a" //Matches to a profile component's id parameter - used for player head textures. UUID must have dashes.
 	}
 }
 ```
