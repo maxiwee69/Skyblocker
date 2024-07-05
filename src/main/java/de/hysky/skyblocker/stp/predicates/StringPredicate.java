@@ -18,8 +18,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.StringIdentifiable;
 
 /**
- * Allows for matching via a string on an item's name or lore; supports full matches with {@link String#equals},
- * and partial matches via {@link String#contains}, {@link String#startsWith}, and {@link String#endsWith}.
+ * Allows for matching via a string on an item's name, lore, or for player heads also the texture base64; supports full
+ * matches with {@link String#equals}, and partial matches via {@link String#contains}, {@link String#startsWith}, and {@link String#endsWith}.
  * 
  * @since 1.22.0
  */

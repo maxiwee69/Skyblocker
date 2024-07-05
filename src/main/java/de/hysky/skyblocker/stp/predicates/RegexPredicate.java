@@ -20,7 +20,7 @@ import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.dynamic.Codecs;
 
 /**
- * Allows for matching via a regex on an item's name or lore; supports full, and partial regex matches.
+ * Allows for matching via a regex on an item's name, lore, or for player heads also the texture base64; supports full, and partial regex matches.
  * 
  * @since 1.22.0
  */

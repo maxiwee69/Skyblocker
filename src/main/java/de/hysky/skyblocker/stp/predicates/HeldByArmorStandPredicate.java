@@ -10,6 +10,11 @@ import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
+/**
+ * Allows for checking whether the {@link ItemStack} is held by an armor stand or not.
+ * 
+ * @since 1.22.0
+ */
 public record HeldByArmorStandPredicate(boolean value) implements SkyblockerTexturePredicate {
 	public static final Identifier ID = Identifier.of(SkyblockerMod.NAMESPACE, "held_by_armor_stand");
 	public static final Codec<HeldByArmorStandPredicate> CODEC = Codec.BOOL.xmap(HeldByArmorStandPredicate::new, HeldByArmorStandPredicate::value);

@@ -15,6 +15,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Uuids;
 
+/**
+ * Allows for matching to the {@code id} (UUID) field of a profile component.
+ * 
+ * @since 1.22.0
+ */
 public record ProfileComponentPredicate(UUID uuid) implements SkyblockerTexturePredicate {
 	public static final Identifier ID = Identifier.of(SkyblockerMod.NAMESPACE, "profile_component");
 	public static final MapCodec<ProfileComponentPredicate> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

@@ -9,6 +9,11 @@ import de.hysky.skyblocker.stp.SkyblockerPredicateTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
+/**
+ * Allows for matching to the API ID of an item.
+ * 
+ * @since 1.22.0
+ */
 public record ApiIdPredicate(String targetId) implements SkyblockerTexturePredicate {
 	public static final Identifier ID = Identifier.of(SkyblockerMod.NAMESPACE, "api_id");
 	public static final Codec<ApiIdPredicate> CODEC = Codec.STRING.xmap(ApiIdPredicate::new, ApiIdPredicate::targetId);
