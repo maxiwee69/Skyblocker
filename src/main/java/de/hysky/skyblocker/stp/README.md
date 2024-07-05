@@ -16,6 +16,7 @@ Predicates are evaluated in the order in which they are defined, so if one predi
 | Predicate Id                   | Type   | Description                                                                    | Since  |
 |--------------------------------|--------|--------------------------------------------------------------------------------|--------|
 | skyblocker:item_id             | String | Exact match for a Skyblock Item ID.                                            | 1.22.0 |
+| skyblocker:api_id              | String | Exact match to an "API ID" for a skyblock item.                                | 1.22.0 |
 | skyblocker:custom_data         | SNBT   | Looks for a match on an item's custom data.                                    | 1.22.0 |
 | skyblocker:location            | String | Matches for a Skyblock location.                                               | 1.22.0 |
 | skyblocker:regex               | Object | Allows for a full or partial regex match on an item's lore, name, or texture.  | 1.22.0 |
@@ -31,6 +32,11 @@ Predicates are evaluated in the order in which they are defined, so if one predi
 ```json
 "predicate": {
 	"skyblocker:item_id": "ASTRAEA"
+}
+```
+```json
+"predicate": {
+	"skyblocker:api_id": "GRAND_FREEZING_RUNE_3" //Skyblocker internally has specialized ids for specific types of runes and other items, see bottom of section for link to conversions.
 }
 ```
 ```json
@@ -98,6 +104,8 @@ Predicates are evaluated in the order in which they are defined, so if one predi
 	"skyblocker:held_by_armor_stand": true //Requires that this ItemStack instance be held by an armor stand.
 }
 ```
+
+API ID Conversions: [here](../mixins/ItemStackMixin.java) in the method named `skyblocker$getSkyblockId` located near the bottom of the class.
 
 ### Logical Predicates
 "Logical" predicates perform logical operations on *other* predicates, for example say you want to override a texture when it's Skyblock Item ID is either `POWER_WITHER_CHESTPLATE` or `POWER_WITHER_LEGGINGS`, due to the default behavior requiring a match for all specified predicates these overrides would need to be defined separately despite doing the same thing; logical predicates solve this issue by allowing you to perform "OR"s, "AND"s, or "NOT"s on a list of predicates.<br>

@@ -1,6 +1,7 @@
 package de.hysky.skyblocker.stp;
 
 import de.hysky.skyblocker.stp.predicates.AndPredicate;
+import de.hysky.skyblocker.stp.predicates.ApiIdPredicate;
 import de.hysky.skyblocker.stp.predicates.BoundingBoxPredicate;
 import de.hysky.skyblocker.stp.predicates.CustomDataPredicate;
 import de.hysky.skyblocker.stp.predicates.HeldByArmorStandPredicate;
@@ -18,6 +19,7 @@ import net.minecraft.util.Identifier;
 
 public interface SkyblockerPredicateTypes {
 	SkyblockerPredicateType<AndPredicate> AND = register(AndPredicate.ID, new SkyblockerPredicateType<>(AndPredicate.CODEC, AndPredicate.MAP_CODEC));
+	SkyblockerPredicateType<ApiIdPredicate> API_ID = register(ApiIdPredicate.ID, new SkyblockerPredicateType<>(ApiIdPredicate.CODEC, ApiIdPredicate.MAP_CODEC));
 	SkyblockerPredicateType<BoundingBoxPredicate> BOUNDING_BOX = register(BoundingBoxPredicate.ID, new SkyblockerPredicateType<>(BoundingBoxPredicate.CODEC, BoundingBoxPredicate.MAP_CODEC));
 	SkyblockerPredicateType<CustomDataPredicate> CUSTOM_DATA = register(CustomDataPredicate.ID, new SkyblockerPredicateType<>(CustomDataPredicate.CODEC, CustomDataPredicate.MAP_CODEC));
 	SkyblockerPredicateType<HeldByArmorStandPredicate> HELD_BY_ARMOR_STAND = register(HeldByArmorStandPredicate.ID, new SkyblockerPredicateType<>(HeldByArmorStandPredicate.CODEC, HeldByArmorStandPredicate.MAP_CODEC));
