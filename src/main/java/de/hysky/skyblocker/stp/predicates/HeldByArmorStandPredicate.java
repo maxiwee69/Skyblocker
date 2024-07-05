@@ -1,0 +1,27 @@
+package de.hysky.skyblocker.stp.predicates;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+
+import de.hysky.skyblocker.SkyblockerMod;
+import de.hysky.skyblocker.stp.SkyblockerPredicateType;
+import de.hysky.skyblocker.stp.SkyblockerPredicateTypes;
+import net.minecraft.entity.decoration.ArmorStandEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Identifier;
+
+public record HeldByArmorStandPredicate(boolean value) implements SkyblockerTexturePredicate {
+	public static final Identifier ID = Identifier.of(SkyblockerMod.NAMESPACE, "held_by_armor_stand");
+	public static final Codec<HeldByArmorStandPredicate> CODEC = Codec.BOOL.xmap(HeldByArmorStandPredicate::new, HeldByArmorStandPredicate::value);
+	public static final MapCodec<HeldByArmorStandPredicate> MAP_CODEC = CODEC.fieldOf("value");
+
+	@Override
+	public boolean test(ItemStack stack) {
+		return stack.getHolder() instanceof ArmorStandEntity == value;
+	}
+
+	@Override
+	public SkyblockerPredicateType<?> getType() {
+		return SkyblockerPredicateTypes.HELD_BY_ARMOR_STAND;
+	}
+}

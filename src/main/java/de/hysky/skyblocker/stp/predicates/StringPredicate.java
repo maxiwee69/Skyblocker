@@ -9,8 +9,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.hysky.skyblocker.SkyblockerMod;
 import de.hysky.skyblocker.stp.SkyblockerPredicateType;
 import de.hysky.skyblocker.stp.SkyblockerPredicateTypes;
+import de.hysky.skyblocker.utils.ItemUtils;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.StringIdentifiable;
@@ -66,6 +68,21 @@ public record StringPredicate(MatchType matchType, MatchTarget target, String st
 					case STARTS_WITH -> stack.getName().getString().startsWith(this.string);
 					case ENDS_WITH -> stack.getName().getString().endsWith(this.string);
 				};
+			}
+
+			case TEXTURE -> {
+				if (stack.isOf(Items.PLAYER_HEAD)) {
+					String textureBase64 = ItemUtils.getHeadTexture(stack);
+
+					if (!textureBase64.isEmpty()) {
+						return switch (this.matchType) {
+							case EQUALS -> textureBase64.equals(this.string);
+							case CONTAINS -> textureBase64.contains(this.string);
+							case STARTS_WITH -> textureBase64.startsWith(this.string);
+							case ENDS_WITH -> textureBase64.endsWith(this.string);
+						};
+					}
+				}
 			}
 		}
 

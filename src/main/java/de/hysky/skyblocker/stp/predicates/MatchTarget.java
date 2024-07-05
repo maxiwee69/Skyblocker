@@ -6,7 +6,8 @@ import net.minecraft.util.StringIdentifiable;
 
 enum MatchTarget implements StringIdentifiable {
 	NAME,
-	LORE;
+	LORE,
+	TEXTURE;
 
 	static final Codec<MatchTarget> CODEC = StringIdentifiable.createCodec(MatchTarget::values);
 

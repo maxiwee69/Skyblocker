@@ -10,8 +10,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.hysky.skyblocker.SkyblockerMod;
 import de.hysky.skyblocker.stp.SkyblockerPredicateType;
 import de.hysky.skyblocker.stp.SkyblockerPredicateTypes;
+import de.hysky.skyblocker.utils.ItemUtils;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.StringIdentifiable;
@@ -58,6 +60,19 @@ public record RegexPredicate(MatchType matchType, MatchTarget target, Pattern re
 						case FULL -> this.regex.matcher(stack.getName().getString()).matches();
 						case PARTIAL -> this.regex.matcher(stack.getName().getString()).find();
 					};
+				}
+
+				case TEXTURE -> {
+					if (stack.isOf(Items.PLAYER_HEAD)) {
+						String textureBase64 = ItemUtils.getHeadTexture(stack);
+
+						if (!textureBase64.isEmpty()) {
+							return switch (this.matchType) {
+								case FULL -> this.regex.matcher(textureBase64).matches();
+								case PARTIAL -> this.regex.matcher(textureBase64).find();
+							};
+						}
+					}
 				}
 			}
 		} catch (Exception ignored) {}
