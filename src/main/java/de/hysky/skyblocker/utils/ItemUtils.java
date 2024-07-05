@@ -159,7 +159,7 @@ public final class ItemUtils {
                 }
             }
 
-            case "RUNE" -> {
+            case "RUNE", "UNIQUE_RUNE" -> {
                 if (customData.contains("runes")) {
                     NbtCompound runes = customData.getCompound("runes");
                     String rune = runes.getKeys().stream().findFirst().orElse("");
@@ -246,7 +246,7 @@ public final class ItemUtils {
                 PetCache.PetInfo petInfo = PetCache.PetInfo.CODEC.parse(JsonOps.INSTANCE, JsonParser.parseString(customData.getString("petInfo"))).getOrThrow();
                 yield petInfo.type() + ';' + petInfo.tierIndex();
             }
-            case "RUNE" -> {
+            case "RUNE", "UNIQUE_RUNE" -> {
                 NbtCompound runes = customData.getCompound("runes");
                 String rune = runes.getKeys().stream().findFirst().orElse("");
                 yield rune.toUpperCase(Locale.ENGLISH) + "_RUNE;" + runes.getInt(rune);
