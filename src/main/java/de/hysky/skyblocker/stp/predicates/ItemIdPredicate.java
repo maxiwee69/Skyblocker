@@ -6,7 +6,6 @@ import com.mojang.serialization.MapCodec;
 import de.hysky.skyblocker.SkyblockerMod;
 import de.hysky.skyblocker.stp.SkyblockerPredicateType;
 import de.hysky.skyblocker.stp.SkyblockerPredicateTypes;
-import de.hysky.skyblocker.utils.ItemUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
@@ -22,7 +21,9 @@ public record ItemIdPredicate(String targetId) implements SkyblockerTexturePredi
 
 	@Override
 	public boolean test(ItemStack stack) {
-		return ItemUtils.getItemId(stack).equals(this.targetId);
+		String itemId = stack.getSkyblockId();
+
+		return itemId != null ? itemId.equals(this.targetId) : false;
 	}
 
 	@Override
