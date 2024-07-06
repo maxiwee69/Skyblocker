@@ -5,6 +5,7 @@ import de.hysky.skyblocker.stp.predicates.ApiIdPredicate;
 import de.hysky.skyblocker.stp.predicates.BoundingBoxPredicate;
 import de.hysky.skyblocker.stp.predicates.CustomDataPredicate;
 import de.hysky.skyblocker.stp.predicates.HeldByArmorStandPredicate;
+import de.hysky.skyblocker.stp.predicates.InsideScreenPredicate;
 import de.hysky.skyblocker.stp.predicates.ItemIdPredicate;
 import de.hysky.skyblocker.stp.predicates.LocationPredicate;
 import de.hysky.skyblocker.stp.predicates.NotPredicate;
@@ -23,6 +24,7 @@ public interface SkyblockerPredicateTypes {
 	SkyblockerPredicateType<BoundingBoxPredicate> BOUNDING_BOX = register(BoundingBoxPredicate.ID, new SkyblockerPredicateType<>(BoundingBoxPredicate.CODEC, BoundingBoxPredicate.MAP_CODEC));
 	SkyblockerPredicateType<CustomDataPredicate> CUSTOM_DATA = register(CustomDataPredicate.ID, new SkyblockerPredicateType<>(CustomDataPredicate.CODEC, CustomDataPredicate.MAP_CODEC));
 	SkyblockerPredicateType<HeldByArmorStandPredicate> HELD_BY_ARMOR_STAND = register(HeldByArmorStandPredicate.ID, new SkyblockerPredicateType<>(HeldByArmorStandPredicate.CODEC, HeldByArmorStandPredicate.MAP_CODEC));
+	SkyblockerPredicateType<InsideScreenPredicate> INSIDE_SCREEN = register(InsideScreenPredicate.ID, new SkyblockerPredicateType<>(InsideScreenPredicate.CODEC, InsideScreenPredicate.MAP_CODEC));
 	SkyblockerPredicateType<ItemIdPredicate> ITEM_ID = register(ItemIdPredicate.ID, new SkyblockerPredicateType<>(ItemIdPredicate.CODEC, ItemIdPredicate.MAP_CODEC));
 	SkyblockerPredicateType<LocationPredicate> LOCATION = register(LocationPredicate.ID, new SkyblockerPredicateType<>(LocationPredicate.CODEC, LocationPredicate.MAP_CODEC));
 	SkyblockerPredicateType<NotPredicate> NOT = register(NotPredicate.ID, new SkyblockerPredicateType<>(NotPredicate.CODEC, NotPredicate.MAP_CODEC));

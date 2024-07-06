@@ -25,6 +25,7 @@ Predicates are evaluated in the order in which they are defined, so if one predi
 | skyblocker:bounding_box        | Object | Allows for matching whether the player is inside of a box.                     | 1.22.0 |
 | skyblocker:profile_component   | Object | Allows for matching to a profile component's uuid.                             | 1.22.0 |
 | skyblocker:held_by_armor_stand | Bool   | Allows for testing whether the ItemStack is held by an armor stand.            | 1.22.0 |
+| skyblocker:inside_screen       | Bool   | Allows for testing whether the ItemStack is inside a screen or not.            | 1.22.0 |
 
 *Note:* The only predicates here that do not require an `ItemStack` are the `location`, and `bounding_box` predicates. All other predicates listed here require an `ItemStack` which means that they can only be tested in scenarios where an `ItemStack` is available. Any predicate that doesn't match this criteria can be used in any place, meanwhile the predicates that do require an `ItemStack` can only be used in item and armor re-texturing.
 
@@ -102,6 +103,11 @@ Predicates are evaluated in the order in which they are defined, so if one predi
 ```json
 "predicate": {
 	"skyblocker:held_by_armor_stand": true //Requires that this ItemStack instance be held by an armor stand.
+}
+```
+```json
+"predicate": {
+	"skyblocker:inside_screen": true //Requires that this ItemStack inside be inside of a screen. Useful for re-texturing Skyblock UI items.
 }
 ```
 
