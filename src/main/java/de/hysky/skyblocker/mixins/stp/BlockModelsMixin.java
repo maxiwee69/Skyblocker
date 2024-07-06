@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 
+import de.hysky.skyblocker.config.SkyblockerConfigManager;
 import de.hysky.skyblocker.stp.SkyblockerBlockTextures;
 import de.hysky.skyblocker.utils.Utils;
 import net.minecraft.block.BlockState;
@@ -25,7 +26,7 @@ public class BlockModelsMixin {
 
 	@ModifyReturnValue(method = "getModel", at = @At("RETURN"))
 	private BakedModel skyblocker$modifyBlockModel(BakedModel original, @Local(argsOnly = true) BlockState state) {
-		if (Utils.isOnHypixel()) {
+		if (Utils.isOnHypixel() && SkyblockerConfigManager.get().uiAndVisuals.skyblockerTexturePredicates.blockTextures) {
 			Identifier replacement = SkyblockerBlockTextures.getBlockReplacement(state.getBlock(), null);
 
 			if (replacement != null) {

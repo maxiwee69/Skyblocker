@@ -684,6 +684,12 @@
 
   "skyblocker.config.uiAndVisuals.showEquipmentInInventory": "Show Equipment in Inventory",
 
+  "skyblocker.config.uiAndVisuals.skyblockerTexturePredicates": "Skyblocker Texture Predicates",
+  "skyblocker.config.uiAndVisuals.skyblockerTexturePredicates.armorTextures": "Armor Re-texturing",
+  "skyblocker.config.uiAndVisuals.skyblockerTexturePredicates.blockTextures": "Block Re-texturing",
+  "skyblocker.config.uiAndVisuals.skyblockerTexturePredicates.itemTextures": "Item Re-texturing",
+  "skyblocker.config.uiAndVisuals.skyblockerTexturePredicates.note": "Note: Texture Packs may require that this option be enabled.",
+
   "skyblocker.config.uiAndVisuals.tabHud": "Fancy tab HUD (Temporarily disabled outside dungeons)",
   "skyblocker.config.uiAndVisuals.tabHud.enableHudBackground": "Enable HUD Background",
   "skyblocker.config.uiAndVisuals.tabHud.enableHudBackground.@Tooltip": "Enables the background of the non-tab HUD.",

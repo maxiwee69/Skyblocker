@@ -5,6 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 
+import de.hysky.skyblocker.config.SkyblockerConfigManager;
 import de.hysky.skyblocker.stp.SkyblockerArmorTextures;
 import de.hysky.skyblocker.utils.Utils;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -24,7 +25,7 @@ public class LivingEntityRendererMixin<T extends LivingEntity, M extends EntityM
 
 	@WrapWithCondition(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/feature/FeatureRenderer;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/Entity;FFFFFF)V"))
 	private boolean skyblocker$skipHeadOnHeadRenderingIfOverriden(FeatureRenderer<T, M> featureRenderer, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, Entity entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
-		if (Utils.isOnHypixel() && featureRenderer instanceof HeadFeatureRenderer && entity instanceof LivingEntity livingEntity) {
+		if (Utils.isOnHypixel() && SkyblockerConfigManager.get().uiAndVisuals.skyblockerTexturePredicates.armorTextures && featureRenderer instanceof HeadFeatureRenderer && entity instanceof LivingEntity livingEntity) {
 			ItemStack headStack = livingEntity.getEquippedStack(EquipmentSlot.HEAD);
 
 			return !(!headStack.isEmpty() && headStack.isOf(Items.PLAYER_HEAD) && SkyblockerArmorTextures.getCustomArmorTextureLayers(headStack) != SkyblockerArmorTextures.NO_CUSTOM_TEXTURES);

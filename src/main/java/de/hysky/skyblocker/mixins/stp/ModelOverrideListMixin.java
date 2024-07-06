@@ -10,6 +10,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 
+import de.hysky.skyblocker.config.SkyblockerConfigManager;
 import de.hysky.skyblocker.stp.predicates.SkyblockerTexturePredicate;
 import de.hysky.skyblocker.utils.Utils;
 import net.minecraft.client.render.model.json.ModelOverride;
@@ -31,7 +32,7 @@ public class ModelOverrideListMixin {
 
 	@ModifyExpressionValue(method = "apply", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/json/ModelOverrideList$BakedOverride;test([F)Z"))
 	private boolean skyblocker$applyPredicates(boolean original, @Local ModelOverrideList.BakedOverride bakedOverride, @Local(argsOnly = true) ItemStack stack) {
-		if (Utils.isOnHypixel()) {
+		if (Utils.isOnHypixel() && SkyblockerConfigManager.get().uiAndVisuals.skyblockerTexturePredicates.itemTextures) {
 			SkyblockerTexturePredicate[] predicates = bakedOverride.getItemPredicates();
 
 			if (predicates != null) {

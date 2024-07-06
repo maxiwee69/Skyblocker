@@ -10,6 +10,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 
+import de.hysky.skyblocker.config.SkyblockerConfigManager;
 import de.hysky.skyblocker.stp.SkyblockerArmorTextures;
 import de.hysky.skyblocker.utils.Utils;
 import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
@@ -24,7 +25,7 @@ public class ArmorFeatureRendererMixin {
 
 	@ModifyExpressionValue(method = "renderArmor", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"))
 	private Item skyblocker$customHeadTextures4Armor(Item original, @Local ItemStack stack, @Share("layers") LocalRef<List<ArmorMaterial.Layer>> layers) {
-		if (original == Items.PLAYER_HEAD) {
+		if (original == Items.PLAYER_HEAD && SkyblockerConfigManager.get().uiAndVisuals.skyblockerTexturePredicates.armorTextures) {
 			List<ArmorMaterial.Layer> customLayers = SkyblockerArmorTextures.getCustomArmorTextureLayers(stack);
 
 			if (customLayers != SkyblockerArmorTextures.NO_CUSTOM_TEXTURES) {
@@ -44,7 +45,7 @@ public class ArmorFeatureRendererMixin {
 
 	@ModifyExpressionValue(method = "renderArmor", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ArmorMaterial;layers()Ljava/util/List;"))
 	private List<ArmorMaterial.Layer> skyblocker$modifyArmorLayers(List<ArmorMaterial.Layer> original, @Local ItemStack stack, @Share("layers") LocalRef<List<ArmorMaterial.Layer>> layers) {
-		if (Utils.isOnHypixel()) {
+		if (Utils.isOnHypixel() && SkyblockerConfigManager.get().uiAndVisuals.skyblockerTexturePredicates.armorTextures) {
 			List<ArmorMaterial.Layer> customLayers = layers.get() == null ? SkyblockerArmorTextures.getCustomArmorTextureLayers(stack) : layers.get();
 
 			if (customLayers != SkyblockerArmorTextures.NO_CUSTOM_TEXTURES) return customLayers;

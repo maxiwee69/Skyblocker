@@ -8,6 +8,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 
+import de.hysky.skyblocker.config.SkyblockerConfigManager;
 import de.hysky.skyblocker.stp.SkyblockerBlockTextures;
 import de.hysky.skyblocker.utils.Utils;
 import net.minecraft.block.BlockState;
@@ -29,7 +30,7 @@ public class SodiumChunkBuilderMeshingTaskMixin {
 	 */
 	@WrapOperation(method = "execute", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/block/BlockModels;getModel(Lnet/minecraft/block/BlockState;)Lnet/minecraft/client/render/model/BakedModel;", remap = true), remap = false, require = 0)
 	private BakedModel skyblocker$modifyBakedModel(BlockModels blockModels, BlockState state, Operation<BakedModel> operation, @Local(ordinal = 0) BlockPos.Mutable pos) {
-		if (Utils.isOnHypixel()) {
+		if (Utils.isOnHypixel() && SkyblockerConfigManager.get().uiAndVisuals.skyblockerTexturePredicates.blockTextures) {
 			Identifier replacement = SkyblockerBlockTextures.getBlockReplacement(state.getBlock(), pos);
 
 			if (replacement != null) {
