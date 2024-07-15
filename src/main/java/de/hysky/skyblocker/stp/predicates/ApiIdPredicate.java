@@ -21,9 +21,7 @@ public record ApiIdPredicate(String targetId) implements SkyblockerTexturePredic
 
 	@Override
 	public boolean test(ItemStack stack) {
-		String apiId = stack.getSkyblockApiId();
-
-		return apiId != null ? apiId.equals(targetId) : false;
+		return targetId.equals(stack.getSkyblockApiId());
 	}
 
 	@Override

@@ -26,7 +26,7 @@ public class BlockModelsMixin {
 
 	@ModifyReturnValue(method = "getModel", at = @At("RETURN"))
 	private BakedModel skyblocker$modifyBlockModel(BakedModel original, @Local(argsOnly = true) BlockState state) {
-		if (Utils.isOnHypixel() && SkyblockerConfigManager.get().uiAndVisuals.skyblockerTexturePredicates.blockTextures) {
+		if (Utils.isOnSkyblock() && SkyblockerConfigManager.get().uiAndVisuals.skyblockerTexturePredicates.blockTextures) {
 			Identifier replacement = SkyblockerBlockTextures.getBlockReplacement(state.getBlock(), null);
 
 			if (replacement != null) {

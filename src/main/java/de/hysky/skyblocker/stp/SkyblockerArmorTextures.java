@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 
@@ -22,8 +21,9 @@ import de.hysky.skyblocker.SkyblockerMod;
 import de.hysky.skyblocker.stp.predicates.SkyblockerTexturePredicate;
 import de.hysky.skyblocker.utils.Utils;
 import de.hysky.skyblocker.utils.scheduler.Scheduler;
+import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.ints.Int2ReferenceOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.item.ArmorMaterial;
@@ -39,7 +39,7 @@ import net.minecraft.util.Identifier;
 public class SkyblockerArmorTextures {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	private static final String ARMOR_OVERRIDES_PATH = "overrides/armor";
-	private static final List<ArmorModelOverride> ARMOR_OVERRIDES = new ObjectArrayList<>();
+	private static final Object2ObjectOpenHashMap<String, ArmorModelOverride> ARMOR_OVERRIDES = new Object2ObjectOpenHashMap<>();
 	private static final Int2ReferenceOpenHashMap<List<ArmorMaterial.Layer>> CACHE = new Int2ReferenceOpenHashMap<>();
 	public static final List<ArmorMaterial.Layer> NO_CUSTOM_TEXTURES = List.of();
 
@@ -63,10 +63,10 @@ public class SkyblockerArmorTextures {
 			ARMOR_OVERRIDES.clear();
 			//Load armour textures from our namespace in the overrides folder
 			Map<Identifier, Resource> overrides = manager.findResources(ARMOR_OVERRIDES_PATH, id -> id.getNamespace().equals(SkyblockerMod.NAMESPACE) && id.getPath().endsWith(".json"));
-			List<CompletableFuture<ArmorModelOverride>> futures = new ArrayList<>();
+			List<CompletableFuture<Pair<List<String>, ArmorModelOverride>>> futures = new ArrayList<>();
 
 			for (Map.Entry<Identifier, Resource> entry : overrides.entrySet()) {
-				CompletableFuture<ArmorModelOverride> future = computeOverride(entry.getKey(), entry.getValue());
+				CompletableFuture<Pair<List<String>, ArmorModelOverride>> future = computeOverride(entry.getKey(), entry.getValue());
 
 				futures.add(future);
 			}
@@ -74,10 +74,14 @@ public class SkyblockerArmorTextures {
 			//Block thread until all armour texture overrides have been loaded
 			CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new)).join();
 
-			for (CompletableFuture<ArmorModelOverride> future : futures) {
-				ArmorModelOverride override = future.join(); //Should never throw
+			for (CompletableFuture<Pair<List<String>, ArmorModelOverride>> future : futures) {
+				Pair<List<String>, ArmorModelOverride> override = future.join(); //Should never throw
 
-				if (override != null) ARMOR_OVERRIDES.add(override);
+				if (override != null) {
+					for (String id : override.left()) {
+						ARMOR_OVERRIDES.put(id, override.right());
+					}
+				}
 			}
 
 			CACHE.clear();
@@ -86,27 +90,30 @@ public class SkyblockerArmorTextures {
 		}
 	}
 
-	private static CompletableFuture<ArmorModelOverride> computeOverride(Identifier id, Resource resource) {
+	private static CompletableFuture<Pair<List<String>, ArmorModelOverride>> computeOverride(Identifier id, Resource resource) {
 		return CompletableFuture.supplyAsync(() -> {
 			try (BufferedReader reader = resource.getReader()) {
 				JsonObject customArmorModelOverride = JsonParser.parseReader(reader).getAsJsonObject();
+				List<String> itemIds = Codec.STRING.listOf().parse(JsonOps.INSTANCE, customArmorModelOverride.get("itemIds")).getOrThrow();
 				List<ArmorMaterial.Layer> layers = CustomArmorLayer.LIST_CODEC.parse(JsonOps.INSTANCE, customArmorModelOverride.get("layers")).getOrThrow().stream()
 						.map(CustomArmorLayer::toLayer)
 						.toList();
-				ArmorModelOverride.ArmorModelTextureOverride[] textureOverrides = customArmorModelOverride.getAsJsonArray("overrides").asList().stream()
-						.map(JsonElement::getAsJsonObject)
-						.map(obj -> {
-							SkyblockerTexturePredicate[] predicates = SkyblockerTexturePredicates.compilePredicates(obj);
-							Optional<List<ArmorMaterial.Layer>> optionalLayerOverrides4Predicate = obj.has("layers") ? Optional.of(
-											CustomArmorLayer.LIST_CODEC.parse(JsonOps.INSTANCE, obj.get("layers")).getOrThrow().stream()
-													.map(CustomArmorLayer::toLayer)
-													.toList()) : Optional.empty();
+				ArmorModelOverride.ArmorModelOverrideOverride[] overrides = new ArmorModelOverride.ArmorModelOverrideOverride[0];
 
-							return new ArmorModelOverride.ArmorModelTextureOverride(predicates, optionalLayerOverrides4Predicate);
-						})
-						.toArray(ArmorModelOverride.ArmorModelTextureOverride[]::new);
+				if (customArmorModelOverride.has("overrides")) {
+					overrides =  customArmorModelOverride.getAsJsonArray("overrides").asList().stream()
+							.map(JsonElement::getAsJsonObject)
+							.map(obj -> {
+								SkyblockerTexturePredicate[] predicates = SkyblockerTexturePredicates.compilePredicates(obj);
+								List<ArmorMaterial.Layer> layerOverride = CustomArmorLayer.LIST_CODEC.parse(JsonOps.INSTANCE, obj.get("layers")).getOrThrow().stream()
+														.map(CustomArmorLayer::toLayer)
+														.toList();
 
-				return new ArmorModelOverride(layers, textureOverrides);
+								return new ArmorModelOverride.ArmorModelOverrideOverride(predicates, layerOverride);
+							}).toArray(ArmorModelOverride.ArmorModelOverrideOverride[]::new);
+				}
+
+				return Pair.of(itemIds, new ArmorModelOverride(layers, overrides));
 			} catch (Exception e) {
 				LOGGER.error("[Skyblocker Armor Textures] Failed to load armor override {}!", id, e);
 			}
@@ -116,26 +123,33 @@ public class SkyblockerArmorTextures {
 	}
 
 	/**
-	 * The result of this method is cached until textures reload and cleared every 5 minutes because a triple loop isn't free and we want high performance.
+	 * The result of this method is cached until textures reload and cleared every 5 minutes because armor model overrides with overrides could
+	 * get expensive if they are tested constantly.
 	 */
 	public static List<ArmorMaterial.Layer> getCustomArmorTextureLayers(ItemStack stack) {
-		if (Utils.isOnHypixel()) {
+		if (Utils.isOnSkyblock()) {
 			int hashCode = getHashCode(stack);
 
 			if (CACHE.containsKey(hashCode)) return CACHE.get(hashCode);
 
-			for (ArmorModelOverride override : ARMOR_OVERRIDES) {
-				texOverridesLoop: for (ArmorModelOverride.ArmorModelTextureOverride texOverride : override.textureOverrides()) {
-					for (SkyblockerTexturePredicate predicate : texOverride.predicates()) {
-						if (!predicate.test(stack)) continue texOverridesLoop;
+			String id = stack.getSkyblockId();
+
+			if (id != null && ARMOR_OVERRIDES.containsKey(id)) {
+				ArmorModelOverride modelOverride = ARMOR_OVERRIDES.get(id);
+
+				overrideLoop: for (ArmorModelOverride.ArmorModelOverrideOverride override : modelOverride.overrides()) {
+					for (SkyblockerTexturePredicate predicate : override.predicates()) {
+						if (!predicate.test(stack)) continue overrideLoop;
 					}
 
-					//When all predicates for this override matched
-					List<ArmorMaterial.Layer> layersToRet = texOverride.modelOverride().isPresent() ? texOverride.modelOverride().get() : override.layers();
-					CACHE.put(hashCode, layersToRet);
+					CACHE.put(hashCode, override.layerOverride());
 
-					return layersToRet;
+					return override.layerOverride();
 				}
+
+				CACHE.put(hashCode, modelOverride.layers());
+
+				return modelOverride.layers();
 			}
 		}
 
@@ -150,8 +164,8 @@ public class SkyblockerArmorTextures {
 		return System.identityHashCode(stack);
 	}
 
-	private record ArmorModelOverride(List<ArmorMaterial.Layer> layers, ArmorModelTextureOverride[] textureOverrides) {
-		private record ArmorModelTextureOverride(SkyblockerTexturePredicate[] predicates, Optional<List<ArmorMaterial.Layer>> modelOverride) {
+	private record ArmorModelOverride(List<ArmorMaterial.Layer> layers, ArmorModelOverrideOverride[] overrides) {
+		private record ArmorModelOverrideOverride(SkyblockerTexturePredicate[] predicates, List<ArmorMaterial.Layer> layerOverride) {
 		}
 	}
 

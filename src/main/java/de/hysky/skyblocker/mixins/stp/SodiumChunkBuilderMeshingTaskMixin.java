@@ -30,7 +30,7 @@ public class SodiumChunkBuilderMeshingTaskMixin {
 	 */
 	@WrapOperation(method = "execute", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/block/BlockModels;getModel(Lnet/minecraft/block/BlockState;)Lnet/minecraft/client/render/model/BakedModel;", remap = true), remap = false, require = 0)
 	private BakedModel skyblocker$modifyBakedModel(BlockModels blockModels, BlockState state, Operation<BakedModel> operation, @Local(ordinal = 0) BlockPos.Mutable pos) {
-		if (Utils.isOnHypixel() && SkyblockerConfigManager.get().uiAndVisuals.skyblockerTexturePredicates.blockTextures) {
+		if (Utils.isOnSkyblock() && SkyblockerConfigManager.get().uiAndVisuals.skyblockerTexturePredicates.blockTextures) {
 			Identifier replacement = SkyblockerBlockTextures.getBlockReplacement(state.getBlock(), pos);
 
 			if (replacement != null) {

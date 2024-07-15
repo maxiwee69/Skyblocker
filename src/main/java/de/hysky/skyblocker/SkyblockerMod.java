@@ -52,6 +52,7 @@ import de.hysky.skyblocker.skyblock.tabhud.util.PlayerListMgr;
 import de.hysky.skyblocker.skyblock.waypoint.*;
 import de.hysky.skyblocker.stp.SkyblockerArmorTextures;
 import de.hysky.skyblocker.stp.SkyblockerBlockTextures;
+import de.hysky.skyblocker.stp.SkyblockerItemTextures;
 import de.hysky.skyblocker.stp.SkyblockerPredicateTypes;
 import de.hysky.skyblocker.utils.*;
 import de.hysky.skyblocker.utils.chat.ChatMessageListener;
@@ -206,6 +207,7 @@ public class SkyblockerMod implements ClientModInitializer {
         SlotTextManager.init();
         BazaarHelper.init();
         SkyblockerPredicateTypes.init();
+        SkyblockerItemTextures.init();
         SkyblockerArmorTextures.init();
         SkyblockerBlockTextures.init();
 

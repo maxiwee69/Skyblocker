@@ -24,8 +24,8 @@ import net.minecraft.item.Items;
 public class ArmorFeatureRendererMixin {
 
 	@ModifyExpressionValue(method = "renderArmor", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"))
-	private Item skyblocker$customHeadTextures4Armor(Item original, @Local ItemStack stack, @Share("layers") LocalRef<List<ArmorMaterial.Layer>> layers) {
-		if (original == Items.PLAYER_HEAD && SkyblockerConfigManager.get().uiAndVisuals.skyblockerTexturePredicates.armorTextures) {
+	private Item skyblocker$customHeadTextures4Armor(Item original, @Local ItemStack stack, @Local(argsOnly = true) EquipmentSlot slot, @Share("layers") LocalRef<List<ArmorMaterial.Layer>> layers) {
+		if (Utils.isOnSkyblock() && slot == EquipmentSlot.HEAD && SkyblockerConfigManager.get().uiAndVisuals.skyblockerTexturePredicates.armorTextures) {
 			List<ArmorMaterial.Layer> customLayers = SkyblockerArmorTextures.getCustomArmorTextureLayers(stack);
 
 			if (customLayers != SkyblockerArmorTextures.NO_CUSTOM_TEXTURES) {
@@ -39,13 +39,13 @@ public class ArmorFeatureRendererMixin {
 	}
 
 	@ModifyExpressionValue(method = "renderArmor", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ArmorItem;getSlotType()Lnet/minecraft/entity/EquipmentSlot;"))
-	private EquipmentSlot skyblocker$returnHeadSlot4PlayerHead(EquipmentSlot original, @Share("layers") LocalRef<List<ArmorMaterial.Layer>> layers) {
+	private EquipmentSlot skyblocker$returnHeadSlot4IrregularHelmets(EquipmentSlot original, @Share("layers") LocalRef<List<ArmorMaterial.Layer>> layers) {
 		return layers.get() == null ? original : EquipmentSlot.HEAD;
 	}
 
 	@ModifyExpressionValue(method = "renderArmor", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ArmorMaterial;layers()Ljava/util/List;"))
 	private List<ArmorMaterial.Layer> skyblocker$modifyArmorLayers(List<ArmorMaterial.Layer> original, @Local ItemStack stack, @Share("layers") LocalRef<List<ArmorMaterial.Layer>> layers) {
-		if (Utils.isOnHypixel() && SkyblockerConfigManager.get().uiAndVisuals.skyblockerTexturePredicates.armorTextures) {
+		if (Utils.isOnSkyblock() && SkyblockerConfigManager.get().uiAndVisuals.skyblockerTexturePredicates.armorTextures) {
 			List<ArmorMaterial.Layer> customLayers = layers.get() == null ? SkyblockerArmorTextures.getCustomArmorTextureLayers(stack) : layers.get();
 
 			if (customLayers != SkyblockerArmorTextures.NO_CUSTOM_TEXTURES) return customLayers;
@@ -55,7 +55,7 @@ public class ArmorFeatureRendererMixin {
 	}
 
 	@ModifyExpressionValue(method = "renderArmor", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;hasGlint()Z"))
-	private boolean skyblocker$hideGlintOnCustomTexturedPlayerHeads(boolean original, @Share("layers") LocalRef<List<ArmorMaterial.Layer>> layers) {
-		return original && layers.get() != null ? false : original;
+	private boolean skyblocker$hideGlintOnCustomTexturedPlayerHeads(boolean original, @Local ItemStack stack, @Share("layers") LocalRef<List<ArmorMaterial.Layer>> layers) {
+		return Utils.isOnSkyblock() && original && stack.isOf(Items.PLAYER_HEAD) && layers.get() != null ? false : original;
 	}
 }
