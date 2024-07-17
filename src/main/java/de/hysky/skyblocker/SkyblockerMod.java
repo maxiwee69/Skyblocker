@@ -58,6 +58,7 @@ import de.hysky.skyblocker.utils.*;
 import de.hysky.skyblocker.utils.chat.ChatMessageListener;
 import de.hysky.skyblocker.utils.discord.DiscordRPCManager;
 import de.hysky.skyblocker.utils.render.RenderHelper;
+import de.hysky.skyblocker.utils.render.SkyblockerRenderLayers;
 import de.hysky.skyblocker.utils.render.culling.OcclusionCulling;
 import de.hysky.skyblocker.utils.container.ContainerSolverManager;
 import de.hysky.skyblocker.utils.render.title.TitleContainer;
@@ -210,6 +211,7 @@ public class SkyblockerMod implements ClientModInitializer {
         SkyblockerItemTextures.init();
         SkyblockerArmorTextures.init();
         SkyblockerBlockTextures.init();
+        SkyblockerRenderLayers.init();
 
         Scheduler.INSTANCE.scheduleCyclic(Utils::update, 20);
         Scheduler.INSTANCE.scheduleCyclic(DiscordRPCManager::updateDataAndPresence, 200);

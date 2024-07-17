@@ -63,6 +63,9 @@
       ],
       "net/minecraft/class_806\u0024class_5827": [
         "de/hysky/skyblocker/injected/SkyblockerModelOverrides"
+      ],
+      "net/minecraft/class_3288": [
+        "de/hysky/skyblocker/injected/SkyblockerResourcePackProfile"
       ]
     }
   }
